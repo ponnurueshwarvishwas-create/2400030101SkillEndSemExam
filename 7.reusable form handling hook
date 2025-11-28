@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Reusable Form Hook - Full Code</title>
+
+  <!-- React & Babel -->
+  <script src="https://unpkg.com/react@18/umd/react.development.js"></script>
+  <script src="https://unpkg.com/react-dom@18/umd/react-dom.development.js"></script>
+  <script src="https://unpkg.com/babel-standalone@6/babel.min.js"></script>
+
+  <style>
+    body { font-family: Arial; padding: 20px; }
+    form { margin-bottom: 30px; }
+    input { margin: 5px 0; padding: 8px; width: 250px; display: block; }
+    button { padding: 8px 16px; }
+  </style>
+</head>
+
+<body>
+
+  <h1>Reusable Form Handling Hook</h1>
+  <div id="root"></div>
+
+  <script type="text/babel">
+
+    /* -------------------------
+       Reusable useForm Hook
+    --------------------------*/
+    function useForm(initialValues, callback) {
+      const [values, setValues] = React.useState(initialValues);
+
+      const handleChange = (e) => {
+        setValues({
+          ...values,
+          [e.target.name]: e.target.value
+        });
+        console.log("Changed:", e.target.name, e.target.value);
+      };
+
+      const handleSubmit = (e) => {
+        e.preventDefault();
+        console.log("Submitted:", values);
+        callback(values);
+      };
+
+      return { values, handleChange, handleSubmit };
+    }
+
+    /* -------------------------
+       Login Form Component
+    --------------------------*/
+    function LoginForm() {
+      const { values, handleChange, handleSubmit } = useForm(
+        { email: "", password: "" },
+        (data) => console.log("Login Data:", data)
+      );
+
+      return (
+        <form onSubmit={handleSubmit}>
+          <h2>Login Form</h2>
+          <input
+            name="email"
+            placeholder="Email"
+            value={values.email}
+            onChange={handleChange}
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={values.password}
+            onChange={handleChange}
+          />
+          <button type="submit">Login</button>
+        </form>
+      );
+    }
+
+    /* -------------------------
+       Registration Form Component
+    --------------------------*/
+    function RegisterForm() {
+      const { values, handleChange, handleSubmit } = useForm(
+        { name: "", email: "", password: "" },
+        (data) => console.log("Registration Data:", data)
+      );
+
+      return (
+        <form onSubmit={handleSubmit}>
+          <h2>Registration Form</h2>
+          <input
+            name="name"
+            placeholder="Full Name"
+            value={values.name}
+            onChange={handleChange}
+          />
+          <input
+            name="email"
+            placeholder="Email"
+            value={values.email}
+            onChange={handleChange}
+          />
+          <input
+            name="password"
+            type="password"
+            placeholder="Password"
+            value={values.password}
+            onChange={handleChange}
+          />
+          <button type="submit">Register</button>
+        </form>
+      );
+    }
+
+    /* -------------------------
+       App Component
+    --------------------------*/
+    function App() {
+      return (
+        <div>
+          <LoginForm />
+          <hr />
+          <RegisterForm />
+        </div>
+      );
+    }
+
+    ReactDOM.createRoot(document.getElementById("root")).render(<App />);
+
+  </script>
+
+</body>
+</html>
